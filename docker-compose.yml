@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: fdr_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fdr_portal
+      POSTGRES_USER: fdr_user
+      POSTGRES_PASSWORD: fdr_password_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fdr_user -d fdr_portal"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+    driver: local
